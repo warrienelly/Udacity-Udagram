@@ -33,21 +33,17 @@ import axios from 'axios';
   //! END @TODO1
   app.get('/filteredimage' , async(req: Request, res: Response ) => {
 
-    let { image_url } = req.query;
-
-    const {data} =  await axios.get(image_url)
-    // console.log({data})
-
+    let  {image_url}  = req.query;
     // checking if image url is null
     if ( !image_url ) {
      return  res.status(400)
                 .send('An image url is required')
     }
     try {
-      const filteredpath = await filterImageFromURL(image_url);
+      const filteredpath: string = await filterImageFromURL(image_url);
       console.log(filteredpath)
-      await res.status(200).sendFile(filteredpath, {}, (err) => {
-        if (err) {
+      await res.status(200).sendFile(filteredpath, {}, (error) => {
+        if (error) {
           return res.status(422).send(`Unable to process image`);
         }
         deleteLocalFiles([filteredpath]);
